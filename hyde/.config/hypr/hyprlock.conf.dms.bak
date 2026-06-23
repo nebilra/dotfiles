@@ -1,7 +1,7 @@
-$text_color = rgba(dfe2f0FF)
-$entry_background_color = rgba(171b2511)
-$entry_border_color = rgba(90909655)
-$entry_color = rgba(dfe2f0FF)
+$text_color = rgba(cde5ffFF)
+$entry_background_color = rgba(001d3111)
+$entry_border_color = rgba(8c919855)
+$entry_color = rgba(cde5ffFF)
 $font_family = Rubik Light
 $font_family_clock = Rubik Light
 $font_material_symbols = Material Symbols Rounded
@@ -9,7 +9,7 @@ $font_material_symbols = Material Symbols Rounded
 background {
     color = rgba(181818FF)
     
-    path = /home/patrix/.wallpapers/Tokyo-Night-Wallpapers/Pictures/wallpapers/tokyo-night11.png
+    path = /home/patrix/.wallpapers/Arcane/Pictures/wallpapers/Arcane.S01E03.The.Base.Violence.Necessary.for.Change.1080p.NF.WEB-DL.DDP5.1.HEVC-TEPES.mkv_snapshot_26.34.348.png
     blur_size = 15
     blur_passes = 4
     brightness = 0.33

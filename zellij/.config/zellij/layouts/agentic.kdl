@@ -87,5 +87,18 @@ layout {
             args "." "--port"
         } 
     }
+    tab {
+        pane command="opencode" {
+            args "." "--port"
+        } 
+    }
+    tab {
+        pane command="nr" {
+            args "dev"
+        } 
+    }
+    // tab {
+    //     pane command="lazysql" 
+    // }
 }
 

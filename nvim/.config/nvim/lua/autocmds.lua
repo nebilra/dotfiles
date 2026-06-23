@@ -70,14 +70,14 @@ autocmd('BufReadPost', {
   end,
 })
 
--- Stop Neovim Daemons.
-autocmd('ExitPre', {
-  group = vim.api.nvim_create_augroup('StopNeovimDaemons', { clear = true }),
-  desc = 'Stop Neovim Dameons (eslint_d, prettier_d etc.) upon exit',
-  callback = function()
-    vim.fn.jobstart(vim.fn.expand '$SCRIPTS' .. 'stop-nvim-daemons.sh', { detach = true })
-  end,
-})
+-- -- Stop Neovim Daemons.
+-- autocmd('ExitPre', {
+--   group = vim.api.nvim_create_augroup('StopNeovimDaemons', { clear = true }),
+--   desc = 'Stop Neovim Dameons (eslint_d, prettier_d etc.) upon exit',
+--   callback = function()
+--     vim.fn.jobstart(vim.fn.expand '$SCRIPTS' .. 'stop-nvim-daemons.sh', { detach = true })
+--   end,
+-- })
 
 -- Syntax highlighting for dotenv files
 autocmd('BufRead', {

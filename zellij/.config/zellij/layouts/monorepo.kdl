@@ -92,8 +92,8 @@ layout {
             args "dev"
         } 
     }
-    tab {
-        pane command="lazysql" 
-    }
+    // tab {
+    //     pane command="lazysql" 
+    // }
 }
 

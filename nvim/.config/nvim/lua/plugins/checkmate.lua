@@ -129,7 +129,7 @@ return {
         choices = function()
           return { 'low', 'medium', 'high' }
         end,
-        key = '<leader>Tp',
+        key = '<leader>kp',
         sort_order = 10,
         jump_to_on_insert = 'value',
         select_on_insert = true,
@@ -141,7 +141,7 @@ return {
         get_value = function()
           return tostring(os.date '%m/%d/%y %H:%M')
         end,
-        key = '<leader>Ts',
+        key = '<leader>kS',
         sort_order = 20,
       },
       -- Example: A @done tag that also sets the todo item state when it is added and removed
@@ -151,7 +151,7 @@ return {
         get_value = function()
           return tostring(os.date '%m/%d/%y %H:%M')
         end,
-        key = '<leader>Td',
+        key = '<leader>kd',
         on_add = function(todo_item)
           require('checkmate').set_todo_item(todo_item, 'checked')
         end,
@@ -159,6 +159,30 @@ return {
           require('checkmate').set_todo_item(todo_item, 'unchecked')
         end,
         sort_order = 30,
+      },
+      status = {
+        choices = { 'backlog', 'in-progress', 'blocked', 'review', 'done' },
+        style = function(context)
+          local value = context.value:lower()
+          if value == 'blocked' then
+            return { fg = '#ff5555', bold = true }
+          elseif value == 'in-progress' then
+            return { fg = '#ffb86c' }
+          elseif value == 'backlog' then
+            return { fg = '#8be9fd' }
+          elseif value == 'done' then
+            return { fg = '#96de7a' }
+          else -- fallback
+            return { fg = '#c5c5c5' }
+          end
+        end,
+        key = '<leader>ks',
+        sort_order = 15,
+        jump_to_on_insert = 'value',
+        select_on_insert = true,
+        get_value = function()
+          return 'backlog' -- Default priority
+        end,
       },
     },
     archive = {

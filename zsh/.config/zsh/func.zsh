@@ -1,9 +1,4 @@
 # Personal Functions
-function cursor() {
-    args=("$@")
-    (nohup ~/Applications/Cursor.AppImage "${args[@]}" --no-sandbox </dev/null >/dev/null 2>&1 &)
-}
-
 function yz() {
 	local tmp="$(mktemp -t "yazi-cwd.XXXXXX")" cwd
 	yazi "$@" --cwd-file="$tmp"

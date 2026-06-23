@@ -21,7 +21,7 @@ map('t', '<C-h>', '<cmd>wincmd h<cr>', { desc = 'Move focus to the left window i
 map('t', '<S-C-l>', '<cmd>wincmd l<cr>', { desc = 'Move focus to the right window in terminal mode' })
 map('t', '<C-j>', '<cmd>wincmd j<cr>', { desc = 'Move focus to the lower window in terminal mode' })
 map('t', '<C-k>', '<cmd>wincmd k<cr>', { desc = 'Move focus to the upper window in terminal mode' })
-map('t', '<C-w>', '<C-\\><C-n><C-w>', { desc = 'Control current window in terminal mode' })
+-- map('t', '<C-w>', '<C-\\><C-n><C-w>', { desc = 'Control current window in terminal mode' })
 
 -- Window management keymaps
 map('n', '<M-S-h>', '<C-w>H', { desc = 'Move window to the left' })

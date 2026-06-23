@@ -11,42 +11,42 @@ is_playing() {
 }
 
 case "$action" in
-  playpause)
-    if is_playing; then
-        # Pause whatever is playing
-        playerctl pause -a
-    else
-        # Nothing is playing → prefer mpd if running, else spotify
-        if pgrep -x mpd >/dev/null; then
-            playerctl --player=mpd play-pause
-        elif pgrep -x spotify >/dev/null; then
-            playerctl --player=spotify play-pause
+    playpause)
+        if is_playing; then
+            # Pause whatever is playing
+            playerctl pause -a
         else
-            # fallback: generic
-            playerctl play-pause
+            # Nothing is playing → prefer mpd if running, else spotify
+            if pgrep -x spotify >/dev/null; then
+                playerctl --player=spotify play-pause
+            elif pgrep -x mpd >/dev/null; then
+                playerctl --player=mpd play-pause
+            else
+                # fallback: generic
+                playerctl play-pause
+            fi
         fi
-    fi
-    ;;
-  next)
-    if pgrep -x mpd >/dev/null; then
-        playerctl --player=mpd next
-    elif pgrep -x spotify >/dev/null; then
-        playerctl --player=spotify next
-    else
-        playerctl next
-    fi
-    ;;
-  prev|previous)
-    if pgrep -x mpd >/dev/null; then
-        playerctl --player=mpd previous
-    elif pgrep -x spotify >/dev/null; then
-        playerctl --player=spotify previous
-    else
-        playerctl previous
-    fi
-    ;;
-  *)
-    echo "Usage: $0 {playpause|next|prev}" >&2
-    exit 1
-    ;;
+        ;;
+    next)
+        if pgrep -x spotify >/dev/null; then
+            playerctl --player=spotify next
+        elif pgrep -x mpd >/dev/null; then
+            playerctl --player=mpd next
+        else
+            playerctl next
+        fi
+        ;;
+    prev|previous)
+        if pgrep -x spotify >/dev/null; then
+            playerctl --player=spotify previous
+        elif pgrep -x mpd >/dev/null; then
+            playerctl --player=mpd previous
+        else
+            playerctl previous
+        fi
+        ;;
+    *)
+        echo "Usage: $0 {playpause|next|prev}" >&2
+        exit 1
+        ;;
 esac

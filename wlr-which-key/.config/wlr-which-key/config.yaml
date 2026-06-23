@@ -47,9 +47,15 @@ menu:
       - key: "s"
         desc: Slack
         cmd: slack
+      - key: "S"
+        desc: Spotify
+        cmd: spotify
       - key: "t"
         desc: Telegram
         cmd: Telegram
       - key: "v"
         desc: Vpn
         cmd: protonvpn-app
+      - key: "w"
+        desc: Hotspot
+        cmd: wihotspot

@@ -18,6 +18,7 @@ alias zjn="zellij -l simple attach --create"
 alias oc="opencode"
 alias open="xdg-open"
 alias lzs="lazysql"
+alias vis="vi-sql"
 alias lzd="lazydocker"
 alias tm="tmux"
 

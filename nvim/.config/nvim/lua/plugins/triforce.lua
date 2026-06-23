@@ -8,5 +8,4 @@ return {
       show_profile = '<leader>tp', -- Open profile with <leader>tp
     },
   },
-  lazy = true,
 }

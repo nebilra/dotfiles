@@ -1,5 +1,5 @@
 return {
-  'patrix726/new-file.nvim',
+  'nebilra/new-file.nvim',
 
   -- dir = '~/Documents/Code/Personal/new-file.nvim',
   enabled = true,

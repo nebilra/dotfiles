@@ -12,12 +12,12 @@ binds {
     Super+Alt+P hotkey-overlay-title="Task Manager" { spawn "dms" "ipc" "call" "processlist" "focusOrToggle"; }
     Super+BackSpace hotkey-overlay-title="Power Menu: Toggle" { spawn "dms" "ipc" "call" "powermenu" "toggle"; }
     Super+D hotkey-overlay-title="Application Launcher" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
-    Super+N allow-when-locked=true { spawn "dms" "ipc" "call" "mpris" "next"; }
+    Super+N allow-when-locked=true { spawn "bash" "-c" "mediactl.sh next"; }
     Super+Shift+BracketLeft hotkey-overlay-title="Wallpaper: Previous" { spawn "dms" "ipc" "call" "wallpaper" "prev"; }
     Super+Shift+BracketRight hotkey-overlay-title="Wallpaper: Next" { spawn "dms" "ipc" "call" "wallpaper" "next"; }
-    Super+Shift+N allow-when-locked=true { spawn "dms" "ipc" "call" "mpris" "previous"; }
+    Super+Shift+N allow-when-locked=true { spawn "bash" "-c" "mediactl.sh previous"; }
     Super+W hotkey-overlay-title="Bar: Toggle (Primary)" { spawn "dms" "ipc" "call" "bar" "toggle" "index" "0"; }
-    Super+space allow-when-locked=true { spawn "dms" "ipc" "call" "mpris" "playPause"; }
+    Super+space allow-when-locked=true hotkey-overlay-title="Play/Pause" { spawn "bash" "-c" "mediactl.sh playpause"; }
     XF86AudioLowerVolume hotkey-overlay-title="Volume Down (5%)" { spawn "dms" "ipc" "call" "audio" "decrement" "5"; }
     XF86AudioMicMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "micmute"; }
     XF86AudioMute allow-when-locked=true { spawn "dms" "ipc" "call" "audio" "mute"; }

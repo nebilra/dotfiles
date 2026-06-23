@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-LAYOUT="default"
+LAYOUT="simple"
 SESH_CONFIG="$HOME/.config/sesh/sesh.toml"
 
 HISTORY_DIR="$HOME/.local/state/zellij"

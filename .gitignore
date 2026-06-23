@@ -82,3 +82,7 @@ yazi/.config/yazi/plugins/
 
 nvim/.config/nvim/lua/ui/theme.lua
 hyde/.config/waypaper/
+niri/.config/niri/dms/colors.kdl
+mpv/.config/mpv/playlists/
+mpv/.config/mpv/persistent_config.json
+hyde/.local/share/themes/Wallbash-Gtk/

@@ -1,4 +1,3 @@
-
 # Clean up
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -29,8 +28,8 @@ path+=(
 	$XDG_DATA_HOME/spicetify
 	$HOME/Documents/Scripts
 	$XDG_BIN_DIR
-	$XDG_BIN_DIR/opencode/bin
-	$XDG_DATA_HOME/bin/hyde-scripts
+	# $XDG_BIN_DIR/opencode/bin
+	$XDG_DATA_HOME/bin
 	$XDG_DATA_HOME/bin/my-scripts
 	$XDG_DATA_HOME/pnpm
 	$CARGO_HOME/bin

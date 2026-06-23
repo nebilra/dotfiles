@@ -271,7 +271,7 @@ status_c {
 status_c {
   'filename',
   cond = condition.is_buf_empty,
-  path = 0,
+  path = 4,
   color = { fg = palette.dragonAqua },
   symbols = {
     modified = custom_icons.touched,
@@ -317,7 +317,7 @@ status_x {
 
 status_x {
   'diagnostics',
-  sources = { 'nvim_lsp', 'nvim_diagnostic' },
+  sources = { 'nvim_diagnostic' },
   symbols = {
     error = custom_icons.error,
     warn = custom_icons.warn,

@@ -19,7 +19,6 @@ window-rule {
 // @id=wr_1771683187675577458 @name=mpv
 window-rule {
     match app-id="^mpv$"
-    open-floating true
 }
 
 // @id=wr_1771683313921015344 @name=wihotspot
@@ -86,4 +85,9 @@ window-rule {
     match app-id="^ONLYOFFICE$"
     open-maximized true
     open-on-workspace "3.chat"
+}
+
+// @id=wr_1779347670594303063 @name=localsend_app
+window-rule {
+    match app-id="^localsend_app$"
 }
