@@ -8,7 +8,7 @@ export LEARNING="$HOME/Documents/Code/Learning"
 export SCRIPTS="$HOME/Documents/Scripts"
 export ZEIT_DB="$XDG_CONFIG_HOME/zeit.db"
 export NI_CONFIG_FILE="$XDG_CONFIG_HOME/nirc"
-export PATH="$HOME/.opencode/bin:$PATH"
+export PATH="$HOME/.opencode/bin:$HOME/.local/opt/activitywatch/aw-server-rust:$HOME/.local/opt/activitywatch:$PATH"
 
 # Use XDG dirs for completion and history files
 [ -d "$XDG_STATE_HOME"/zsh ] || mkdir -p "$XDG_STATE_HOME"/zsh

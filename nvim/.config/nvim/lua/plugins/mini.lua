@@ -27,6 +27,14 @@ return {
             return require('configs.mini-emmet').totag(emmet)
           end,
         },
+        d = {
+          input = { '%$%{(.-)%}', '^.-%$%{()(.-)()%}.-$' },
+          output = { left = '${', right = '}' },
+        },
+        p = {
+          input = { '`%$%{(.-)%}`', '^.-`%$%{()(.-)()%}`.-$' },
+          output = { left = '`${', right = '}`' },
+        },
       },
     }
 

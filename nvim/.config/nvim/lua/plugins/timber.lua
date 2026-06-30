@@ -1,6 +1,5 @@
 return {
   'Goose97/timber.nvim',
-  version = '2.3.0', -- Use for stability; omit to use `main` branch for the latest features
   event = 'VeryLazy',
   opts = {},
   keys = {

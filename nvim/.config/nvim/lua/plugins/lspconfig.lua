@@ -164,7 +164,7 @@ return {
       })
 
       -- Set log level to off for performance reasons
-      vim.lsp.set_log_level 'off'
+      vim.lsp.log.set_level 'off'
 
       -- Diagnostic Config
       -- See :help vim.diagnostic.Opts
