@@ -30,12 +30,12 @@ desc = "go to New Volume"
 
 [[mgr.prepend_keymap]]
 on   = [ "g", "w" ]
-run  = "cd ~/Documents/Code/Work"
+run  = "cd ~/Documents/code/work"
 desc = "go to Work"
 
 [[mgr.prepend_keymap]]
 on   = [ "g", "C" ]
-run  = "cd ~/Documents/Code"
+run  = "cd ~/Documents/code"
 desc = "go to Code"
 
 [[mgr.prepend_keymap]]

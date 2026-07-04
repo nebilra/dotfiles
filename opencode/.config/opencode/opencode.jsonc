@@ -1,0 +1,305 @@
+{
+	"$schema": "https://opencode.ai/config.json",
+	"permission": {
+		"edit": "ask",
+		"bash": {
+			"*": "ask",
+			"npx tsc --noEmit*": "allow",
+			"npx biome*": "allow",
+			"npx prettier*": "allow",
+			"npx eslint*": "allow",
+			"npx ruff*": "allow",
+			"go fmt*": "allow",
+			"cargo fmt*": "allow",
+			"black*": "allow",
+			"ruff format*": "allow",
+			"rustfmt*": "allow"
+		}
+	},
+	"autoupdate": false,
+	"plugin": ["cursor-acp", "@mohak34/opencode-notifier@latest"],
+	"agent": {
+		"reviewer": {
+			"description": "Reviews code diffs for bugs, edge cases, security issues, and style consistency",
+			"mode": "subagent",
+			"model": "opencode/deepseek-v4-flash-free",
+			"temperature": 0.1,
+			"prompt": "You are a code reviewer. Analyze the provided code and diff for:\n- Logic bugs and edge cases\n- Error handling gaps\n- Security vulnerabilities\n- Performance issues\n- Style consistency with the surrounding code\n\nProvide clear, actionable feedback. Do NOT make any edits or write code.",
+			"permission": {
+				"edit": "deny",
+				"bash": "deny"
+			}
+		},
+		"documenter": {
+			"description": "Documents code changes in docs/ folder as markdown",
+			"mode": "subagent",
+			"model": "opencode/deepseek-v4-flash-free",
+			"temperature": 0.2,
+			"prompt": "You are a documentation writer. Given a set of code changes, write clear markdown documentation in the docs/ folder. Include:\n- What changed and why\n- New functions/features with usage examples\n- API changes if applicable\n- Breaking changes or migration notes\n\nRead the codebase to understand context. Use `git diff` to see what changed. Write documentation files with clear headings, code blocks, and concise explanations.",
+			"permission": {
+				"edit": "ask",
+				"bash": "ask"
+			}
+		},
+		"test-builder": {
+			"description": "Writes tests for new features following existing patterns",
+			"mode": "subagent",
+			"model": "opencode/deepseek-v4-flash-free",
+			"temperature": 0.1,
+			"prompt": "You are a test writer. Given a new feature or code change:\n1. Read existing tests in the project to understand the test framework, patterns, and conventions\n2. Write comprehensive tests covering: happy path, edge cases, error states\n3. Follow the exact style (describe/it, test(), etc.) used in existing tests\n4. Place test files in the correct location matching the project's convention\n5. Run the tests after writing to confirm they pass\n6. Fix any failures\n\nDo NOT modify source code. Only write and update test files.",
+			"permission": {
+				"edit": "ask",
+				"bash": "ask"
+			}
+		},
+		"research": {
+			"description": "Researches codebase patterns, libraries, and external references",
+			"mode": "subagent",
+			"model": "opencode/deepseek-v4-flash-free",
+			"temperature": 0.3,
+			"prompt": "You are a research assistant. Given a question or topic:\n1. Search the codebase using grep, glob, and file reads to find relevant code\n2. Use web search and web fetch to look up documentation, libraries, API references, and best practices\n3. Synthesize findings into a clear summary with links to relevant files and sources\n4. Suggest implementation approaches when asked\n\nYou gather information only. Do NOT write or edit any code or documentation.",
+			"permission": {
+				"edit": "deny",
+				"bash": "ask"
+			}
+		},
+		"refactor": {
+			"description": "Performs targeted code refactors: rename, extract, move, simplify",
+			"mode": "subagent",
+			"model": "opencode/deepseek-v4-flash-free",
+			"temperature": 0.1,
+			"prompt": "You are a refactoring specialist. Given a refactoring task:\n1. First read and understand the full scope of what needs to change\n2. Make the smallest possible change — do NOT refactor unrelated code\n3. Preserve existing behavior exactly — no logic changes, no style cleanup beyond what's needed\n4. Update all references across files (imports, calls, types)\n5. Ask before making changes\n\nStrict rules: NO unrelated cleanup. NO style changes. NO behavior changes. ONLY what's explicitly requested.",
+			"permission": {
+				"edit": "ask",
+				"bash": "ask"
+			}
+		}
+	},
+	"provider": {
+		"cursor-acp": {
+			"name": "Cursor",
+			"npm": "@ai-sdk/openai-compatible",
+			"options": {
+				"baseURL": "http://127.0.0.1:32124/v1"
+			},
+			"models": {
+				"auto": {
+					"name": "Auto"
+				},
+				"composer-2-fast": {
+					"name": "Composer 2 Fast"
+				},
+				"composer-2": {
+					"name": "Composer 2"
+				},
+				"composer-1.5": {
+					"name": "Composer 1.5"
+				},
+				"gpt-5.3-codex-low": {
+					"name": "Codex 5.3 Low"
+				},
+				"gpt-5.3-codex-low-fast": {
+					"name": "Codex 5.3 Low Fast"
+				},
+				"gpt-5.3-codex": {
+					"name": "Codex 5.3"
+				},
+				"gpt-5.3-codex-fast": {
+					"name": "Codex 5.3 Fast"
+				},
+				"gpt-5.3-codex-high": {
+					"name": "Codex 5.3 High"
+				},
+				"gpt-5.3-codex-high-fast": {
+					"name": "Codex 5.3 High Fast"
+				},
+				"gpt-5.3-codex-xhigh": {
+					"name": "Codex 5.3 Extra High"
+				},
+				"gpt-5.3-codex-xhigh-fast": {
+					"name": "Codex 5.3 Extra High Fast"
+				},
+				"gpt-5.2": {
+					"name": "GPT-5.2"
+				},
+				"gpt-5.3-codex-spark-preview-low": {
+					"name": "Codex 5.3 Spark Low"
+				},
+				"gpt-5.3-codex-spark-preview": {
+					"name": "Codex 5.3 Spark"
+				},
+				"gpt-5.3-codex-spark-preview-high": {
+					"name": "Codex 5.3 Spark High"
+				},
+				"gpt-5.3-codex-spark-preview-xhigh": {
+					"name": "Codex 5.3 Spark Extra High"
+				},
+				"gpt-5.2-codex-low": {
+					"name": "Codex 5.2 Low"
+				},
+				"gpt-5.2-codex-low-fast": {
+					"name": "Codex 5.2 Low Fast"
+				},
+				"gpt-5.2-codex": {
+					"name": "Codex 5.2"
+				},
+				"gpt-5.2-codex-fast": {
+					"name": "Codex 5.2 Fast"
+				},
+				"gpt-5.2-codex-high": {
+					"name": "Codex 5.2 High"
+				},
+				"gpt-5.2-codex-high-fast": {
+					"name": "Codex 5.2 High Fast"
+				},
+				"gpt-5.2-codex-xhigh": {
+					"name": "Codex 5.2 Extra High"
+				},
+				"gpt-5.2-codex-xhigh-fast": {
+					"name": "Codex 5.2 Extra High Fast"
+				},
+				"gpt-5.1-codex-max-low": {
+					"name": "Codex 5.1 Max Low"
+				},
+				"gpt-5.1-codex-max-low-fast": {
+					"name": "Codex 5.1 Max Low Fast"
+				},
+				"gpt-5.1-codex-max-medium": {
+					"name": "Codex 5.1 Max"
+				},
+				"gpt-5.1-codex-max-medium-fast": {
+					"name": "Codex 5.1 Max Medium Fast"
+				},
+				"gpt-5.1-codex-max-high": {
+					"name": "Codex 5.1 Max High"
+				},
+				"gpt-5.1-codex-max-high-fast": {
+					"name": "Codex 5.1 Max High Fast"
+				},
+				"gpt-5.1-codex-max-xhigh": {
+					"name": "Codex 5.1 Max Extra High"
+				},
+				"gpt-5.1-codex-max-xhigh-fast": {
+					"name": "Codex 5.1 Max Extra High Fast"
+				},
+				"gpt-5.5-medium": {
+					"name": "GPT-5.5 1M"
+				},
+				"gpt-5.4-high": {
+					"name": "GPT-5.4 1M High"
+				},
+				"gpt-5.4-high-fast": {
+					"name": "GPT-5.4 High Fast"
+				},
+				"gpt-5.5-high": {
+					"name": "GPT-5.5 1M High"
+				},
+				"gpt-5.5-extra-high": {
+					"name": "GPT-5.5 1M Extra High"
+				},
+				"gpt-5.4-low": {
+					"name": "GPT-5.4 1M Low"
+				},
+				"gpt-5.4-medium": {
+					"name": "GPT-5.4 1M"
+				},
+				"gpt-5.4-medium-fast": {
+					"name": "GPT-5.4 Fast"
+				},
+				"gpt-5.4-xhigh": {
+					"name": "GPT-5.4 1M Extra High"
+				},
+				"gpt-5.4-xhigh-fast": {
+					"name": "GPT-5.4 Extra High Fast"
+				},
+				"gpt-5.2-low": {
+					"name": "GPT-5.2 Low"
+				},
+				"gpt-5.2-low-fast": {
+					"name": "GPT-5.2 Low Fast"
+				},
+				"gpt-5.2-fast": {
+					"name": "GPT-5.2 Fast"
+				},
+				"gpt-5.2-high": {
+					"name": "GPT-5.2 High"
+				},
+				"gpt-5.2-high-fast": {
+					"name": "GPT-5.2 High Fast"
+				},
+				"gpt-5.2-xhigh": {
+					"name": "GPT-5.2 Extra High"
+				},
+				"gpt-5.2-xhigh-fast": {
+					"name": "GPT-5.2 Extra High Fast"
+				},
+				"gemini-3.1-pro": {
+					"name": "Gemini 3.1 Pro"
+				},
+				"gpt-5.4-mini-none": {
+					"name": "GPT-5.4 Mini None"
+				},
+				"gpt-5.4-mini-low": {
+					"name": "GPT-5.4 Mini Low"
+				},
+				"gpt-5.4-mini-medium": {
+					"name": "GPT-5.4 Mini"
+				},
+				"gpt-5.4-mini-high": {
+					"name": "GPT-5.4 Mini High"
+				},
+				"gpt-5.4-mini-xhigh": {
+					"name": "GPT-5.4 Mini Extra High"
+				},
+				"gpt-5.4-nano-none": {
+					"name": "GPT-5.4 Nano None"
+				},
+				"gpt-5.4-nano-low": {
+					"name": "GPT-5.4 Nano Low"
+				},
+				"gpt-5.4-nano-medium": {
+					"name": "GPT-5.4 Nano"
+				},
+				"gpt-5.4-nano-high": {
+					"name": "GPT-5.4 Nano High"
+				},
+				"gpt-5.4-nano-xhigh": {
+					"name": "GPT-5.4 Nano Extra High"
+				},
+				"grok-4-20": {
+					"name": "Grok 4.20"
+				},
+				"grok-4-20-thinking": {
+					"name": "Grok 4.20 Thinking"
+				},
+				"gpt-5.1-low": {
+					"name": "GPT-5.1 Low"
+				},
+				"gpt-5.1": {
+					"name": "GPT-5.1"
+				},
+				"gpt-5.1-high": {
+					"name": "GPT-5.1 High"
+				},
+				"gemini-3-flash": {
+					"name": "Gemini 3 Flash"
+				},
+				"gpt-5.1-codex-mini-low": {
+					"name": "Codex 5.1 Mini Low"
+				},
+				"gpt-5.1-codex-mini": {
+					"name": "Codex 5.1 Mini"
+				},
+				"gpt-5.1-codex-mini-high": {
+					"name": "Codex 5.1 Mini High"
+				},
+				"gpt-5-mini": {
+					"name": "GPT-5 Mini"
+				},
+				"kimi-k2.5": {
+					"name": "Kimi K2.5"
+				}
+			}
+		}
+	}
+}

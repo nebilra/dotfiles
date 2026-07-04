@@ -1,7 +1,7 @@
 return {
   'nebilra/new-file.nvim',
 
-  -- dir = '~/Documents/Code/Personal/new-file.nvim',
+  -- dir = '~/Documents/code/personal/new-file.nvim',
   enabled = true,
   opts = {},
   keys = {

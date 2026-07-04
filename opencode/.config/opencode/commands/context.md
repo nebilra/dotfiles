@@ -1,0 +1,1 @@
+Read or update CONTEXT.md in the project root with a summary of the current session: what was built, key decisions, files changed, and any open questions. This preserves session context for next time.

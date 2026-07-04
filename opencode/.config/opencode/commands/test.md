@@ -1,0 +1,1 @@
+Run the project's test suite and report any failures. If a test framework is detectable from the project (package.json, Cargo.toml, pyproject.toml, etc.), use it directly. Otherwise, ask what test command to use.
