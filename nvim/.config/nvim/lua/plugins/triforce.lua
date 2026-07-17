@@ -3,9 +3,13 @@ return {
   dependencies = {
     'nvzone/volt',
   },
-  opts = {
-    keymap = {
-      show_profile = '<leader>tp', -- Open profile with <leader>tp
+  opts = {},
+  keys = {
+    {
+      '<leader>tp',
+      function()
+        require('triforce').show_profile()
+      end,
     },
   },
 }
