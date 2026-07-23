@@ -26,6 +26,7 @@ eval "$(zoxide init zsh --cmd cd)"
 precmd() { precmd() { echo "" } }
 
 bindkey '^R' fzf-history-widget
+bindkey '^P' up-line-or-beginning-search
 
 # Custom zsh scripts
 source $ZDOTDIR/paths.zsh

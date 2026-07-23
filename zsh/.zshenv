@@ -32,6 +32,7 @@ path+=(
 	$XDG_DATA_HOME/bin
 	$XDG_DATA_HOME/bin/my-scripts
 	$XDG_DATA_HOME/pnpm
+	$XDG_DATA_HOME/pnpm/bin
 	$CARGO_HOME/bin
 )
 export path
