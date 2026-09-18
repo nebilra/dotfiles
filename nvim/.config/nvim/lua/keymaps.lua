@@ -21,7 +21,6 @@ map('t', '<C-h>', '<cmd>wincmd h<cr>', { desc = 'Move focus to the left window i
 map('t', '<S-C-l>', '<cmd>wincmd l<cr>', { desc = 'Move focus to the right window in terminal mode' })
 map('t', '<C-j>', '<cmd>wincmd j<cr>', { desc = 'Move focus to the lower window in terminal mode' })
 map('t', '<C-k>', '<cmd>wincmd k<cr>', { desc = 'Move focus to the upper window in terminal mode' })
--- map('t', '<C-w>', '<C-\\><C-n><C-w>', { desc = 'Control current window in terminal mode' })
 
 -- Window management keymaps
 map('n', '<M-S-h>', '<C-w>H', { desc = 'Move window to the left' })
@@ -110,12 +109,18 @@ map({ 'n', 'o', 'x' }, '["', [[?\v("|'|`)[^"'`]*\zs\1<CR><cmd>nohlsearch<CR>]], 
 
 -- Navigate Open Buffers
 map('n', '<leader>x', '<cmd>bp<CR><cmd>bd#<CR>', { desc = 'buffer close' })
-map('n', '<tab>', '<cmd>bn<CR>', { desc = 'buffer goto next' })
-map('n', '<S-tab>', '<cmd>bp<CR>', { desc = 'buffer goto previous' })
+-- map('n', '<tab>', '<cmd>bn<CR>', { desc = 'buffer goto next' })
+-- map('n', '<S-tab>', '<cmd>bp<CR>', { desc = 'buffer goto previous' })
 
 -- Navigate Open Tabs
 map('n', '<C-z>', '<cmd>tabclose<CR>', { desc = 'Tab close' })
 map('n', '<C-n>', '<cmd>tab split<CR>', { desc = 'Tab create' })
+map({ 'n' }, '<tab>', function()
+  vim.cmd 'tabnext'
+end, { desc = 'Tab goto next' })
+map({ 'n' }, '<S-tab>', function()
+  vim.cmd 'tabprevious'
+end, { desc = 'Tab goto previous' })
 map({ 'n', 't' }, '<M-C-j>', function()
   vim.cmd 'tabnext'
   if vim.bo.buftype == 'terminal' then
@@ -129,6 +134,17 @@ map({ 'n', 't' }, '<M-C-k>', function()
   end
 end, { desc = 'Tab goto previous' })
 
+-- Open github url of a project
+map('n', '<leader>go', function()
+  local url = vim.fn.system('git remote get-url origin'):gsub('%s+$', '')
+
+  if vim.v.shell_error ~= 0 then
+    vim.notify("No Git remote 'origin' found", vim.log.levels.ERROR)
+    return
+  end
+
+  vim.ui.open(url)
+end, { desc = 'Open [G]itHub remote' })
 -- Repeat last move from treesitter textobjects
 -- local ts_repeat_move = require 'nvim-treesitter.textobjects.repeatable_move'
 -- Repeat movement with ; and ,

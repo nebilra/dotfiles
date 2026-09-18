@@ -5,11 +5,42 @@ return { -- Linting
     local lint = require 'lint'
     lint.linters_by_ft = {
       markdown = { 'markdownlint' },
-      -- javascript = { 'eslint' },
-      -- javascriptreact = { 'eslint' },
-      -- typescript = { 'eslint' },
-      -- typescriptreact = { 'eslint' },
+      javascript = { 'eslint_d' },
+      javascriptreact = { 'eslint_d' },
+      typescript = { 'eslint_d' },
+      typescriptreact = { 'eslint_d' },
     }
+
+    local function has_eslint(bufnr)
+      local filename = vim.api.nvim_buf_get_name(bufnr)
+
+      local config = vim.fs.find({
+        'eslint.config.js',
+        'eslint.config.mjs',
+        'eslint.config.cjs',
+        '.eslintrc',
+        '.eslintrc.js',
+        '.eslintrc.cjs',
+        '.eslintrc.json',
+        '.eslintrc.yml',
+        '.eslintrc.yaml',
+      }, {
+        path = filename,
+        upward = true,
+      })[1]
+
+      if not config then
+        return false
+      end
+
+      local root = vim.fs.root(bufnr, { 'package.json', '.git' })
+
+      return root ~= nil and vim.uv.fs_stat(root .. '/node_modules/.bin/eslint') ~= nil
+    end
+
+    lint.linters.eslint_d.condition = function(ctx)
+      return has_eslint(ctx.bufnr)
+    end
 
     lint.linters.markdownlint = require('lint.util').wrap(lint.linters.markdownlint, function(diagnostic)
       -- ignore "MD013: line length error from markdownlint" error

@@ -49,7 +49,30 @@ return {
       end,
       formatters = {
         prettierd = {
+          condition = function(ctx)
+            return vim.fs.find({
+              '.prettierrc',
+              '.prettierrc.json',
+              '.prettierrc.js',
+              '.prettierrc.cjs',
+              'prettier.config.js',
+              'prettier.config.cjs',
+            }, {
+              path = vim.fs.dirname(ctx.filename),
+              upward = true,
+            })[1] ~= nil
+          end,
+
           prepend_args = { '--use-tabs' },
+        },
+        biome = {
+
+          condition = function(ctx)
+            return vim.fs.find({ 'biome.json', 'biome.jsonc' }, {
+              path = vim.fs.dirname(ctx.filename),
+              upward = true,
+            })[1] ~= nil
+          end,
         },
       },
       formatters_by_ft = {
@@ -59,18 +82,18 @@ return {
         go = { 'goimports' },
         -- You can use 'stop_after_first' to run the first available formatter from the list
         python = { 'isort', 'black', stop_after_first = false },
-        svelte = { 'biome', 'biome-organize-imports' },
-        javascript = { 'biome', 'biome-organize-imports' },
-        typescript = { 'biome', 'biome-organize-imports' },
-        javascriptreact = { 'biome', 'biome-organize-imports' },
-        typescriptreact = { 'biome', 'biome-organize-imports' },
-        json = { 'biome', 'biome-organize-imports' },
-        jsonc = { 'biome', 'biome-organize-imports' },
-        css = { 'biome', 'biome-organize-imports' },
-        graphql = { 'biome', 'biome-organize-imports' },
-        html = { 'biome', 'biome-organize-imports' },
-        vue = { 'biome', 'biome-organize-imports' },
-        toml = { 'biome', 'biome-organize-imports' },
+        svelte = { 'biome', 'prettierd', 'biome-organize-imports' },
+        javascript = { 'biome', 'prettierd', 'biome-organize-imports' },
+        typescript = { 'biome', 'prettierd', 'biome-organize-imports' },
+        javascriptreact = { 'biome', 'prettierd', 'biome-organize-imports' },
+        typescriptreact = { 'biome', 'prettierd', 'biome-organize-imports' },
+        json = { 'biome', 'prettierd', 'biome-organize-imports' },
+        jsonc = { 'biome', 'prettierd', 'biome-organize-imports' },
+        css = { 'biome', 'prettierd', 'biome-organize-imports' },
+        graphql = { 'biome', 'prettierd', 'biome-organize-imports' },
+        html = { 'biome', 'prettierd', 'biome-organize-imports' },
+        vue = { 'biome', 'prettierd', 'biome-organize-imports' },
+        toml = { 'biome', 'prettierd', 'biome-organize-imports' },
         flow = { 'prettierd', 'prettier', stop_after_first = true },
         angular = { 'prettierd', 'prettier', stop_after_first = true },
         less = { 'prettierd', 'prettier', stop_after_first = true },

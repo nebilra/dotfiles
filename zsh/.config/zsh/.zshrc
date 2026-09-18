@@ -20,6 +20,8 @@ setopt correct
 source <(fzf --zsh)
 export FZF_DEFAULT_OPTS='--style full --height 50% --layout reverse'
 
+export JIRA_API_TOKEN="$(secret-tool lookup service jira)"
+
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh --cmd cd)"
 

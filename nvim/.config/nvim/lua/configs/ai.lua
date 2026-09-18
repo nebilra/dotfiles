@@ -18,7 +18,7 @@ end
 ---@return { from: integer[], to: integer[] }|nil
 local function get_selection()
   local mode = vim.fn.mode()
-  if not mode:match('^[vV\22]') then
+  if not mode:match '^[vV\22]' then
     return nil
   end
 
@@ -83,7 +83,63 @@ function M.ask()
   end)
 end
 
-vim.keymap.set('n', '<leader>a', M.ask, { desc = 'AI: compose prompt with file context, copy to clipboard' })
-vim.keymap.set('x', '<leader>a', M.ask, { desc = 'AI: compose prompt with selection, copy to clipboard' })
+local severity_names = {
+  [vim.diagnostic.severity.ERROR] = 'ERROR',
+  [vim.diagnostic.severity.WARN] = 'WARN',
+  [vim.diagnostic.severity.INFO] = 'INFO',
+  [vim.diagnostic.severity.HINT] = 'HINT',
+}
+
+local function diagnostics_text(only_errors)
+  local path = buffer_path()
+  local diags = vim.diagnostic.get(0)
+  if only_errors then
+    diags = vim.tbl_filter(function(d)
+      return d.severity == vim.diagnostic.severity.ERROR
+    end, diags)
+  end
+  table.sort(diags, function(a, b)
+    if a.lnum ~= b.lnum then
+      return a.lnum < b.lnum
+    end
+    return a.col < b.col
+  end)
+  if #diags == 0 then
+    return 'No diagnostics in ' .. path
+  end
+  local lines = {}
+  for _, d in ipairs(diags) do
+    local sev = severity_names[d.severity] or '?'
+    local msg = d.message:gsub('\n', ' ')
+    local src = d.source and (' (' .. d.source .. ')') or ''
+    table.insert(lines, string.format('%s:%d:%d [%s] %s%s', path, d.lnum + 1, d.col + 1, sev, msg, src))
+  end
+  return table.concat(lines, '\n')
+end
+
+function M.ask_diagnostics(only_errors)
+  local path = buffer_path()
+  local current_line = vim.fn.line '.'
+  local text = diagnostics_text(only_errors)
+
+  Snacks.input({ prompt = 'AI Prompt: ' }, function(prompt)
+    if not prompt or prompt == '' then
+      return
+    end
+
+    local parts = { prompt, '', '```text', text, '```', string.format('%s:%d', path, current_line) }
+    vim.fn.setreg('+', table.concat(parts, '\n'))
+    vim.notify('AI diagnostics prompt copied to clipboard', vim.log.levels.INFO, { title = 'AI' })
+  end)
+end
+
+vim.keymap.set('n', '<leader>ap', M.ask, { desc = 'AI: compose prompt with file context, copy to clipboard' })
+vim.keymap.set('x', '<leader>ap', M.ask, { desc = 'AI: compose prompt with selection, copy to clipboard' })
+vim.keymap.set('n', '<leader>ad', function()
+  M.ask_diagnostics(false)
+end, { desc = 'AI: compose prompt with file diagnostics, copy to clipboard' })
+vim.keymap.set('n', '<leader>ae', function()
+  M.ask_diagnostics(true)
+end, { desc = 'AI: compose prompt with file errors, copy to clipboard' })
 
 return M

@@ -61,11 +61,8 @@ return {
       preset = {
         ---@type snacks.dashboard.Item[]
         keys = {
-          -- { icon = ' ', key = 'f', desc = 'Find File', action = ":lua Snacks.dashboard.pick('files')" },
-          { icon = ' ', key = 'f', desc = 'Find File', action = ':FFFFind' },
-          { icon = ' ', key = 'g', desc = 'Find Text', action = ":lua require('fff').live_grep()" },
-          -- { icon = ' ', key = 'n', desc = 'New File', action = ':ene | startinsert' },
-          -- { icon = ' ', key = 'g', desc = 'Find Text', action = ":lua Snacks.dashboard.pick('live_grep')" },
+          { icon = ' ', key = 'f', desc = 'Find File', action = ":lua Snacks.dashboard.pick('files')" },
+          { icon = ' ', key = 'g', desc = 'Find Text', action = ":lua Snacks.dashboard.pick('live_grep')" },
           { icon = ' ', key = 'r', desc = 'Recent Files', action = ":lua Snacks.dashboard.pick('oldfiles')" },
           { icon = ' ', key = 'l', desc = 'Leetcode Dashboard', action = ':Leet' },
           { icon = ' ', key = 'c', desc = 'Config', action = ":lua Snacks.dashboard.pick('files', {cwd = vim.fn.stdpath('config')})" },
@@ -197,13 +194,13 @@ return {
       end,
       desc = 'Snacks: [S]earch [K]eymaps',
     },
-    -- {
-    --   '<leader>sf',
-    --   function()
-    --     Snacks.picker.files()
-    --   end,
-    --   desc = 'Snacks: [S]earch [F]iles',
-    -- },
+    {
+      '<leader>sf',
+      function()
+        Snacks.picker.files()
+      end,
+      desc = 'Snacks: [S]earch [F]iles',
+    },
     {
       '<leader>sS',
       function()
@@ -211,20 +208,20 @@ return {
       end,
       desc = 'Snacks: [S]earch [S]elect Snacks Picker',
     },
-    -- {
-    --   '<leader>sw',
-    --   function()
-    --     Snacks.picker.grep_word()
-    --   end,
-    --   desc = 'Snacks: [S]earch current [W]ord',
-    -- },
-    -- {
-    --   '<leader>sg',
-    --   function()
-    --     Snacks.picker.grep()
-    --   end,
-    --   desc = 'Snacks: [S]earch by [G]rep',
-    -- },
+    {
+      '<leader>sw',
+      function()
+        Snacks.picker.grep_word()
+      end,
+      desc = 'Snacks: [S]earch current [W]ord',
+    },
+    {
+      '<leader>sg',
+      function()
+        Snacks.picker.grep()
+      end,
+      desc = 'Snacks: [S]earch by [G]rep',
+    },
     {
       '<leader>sd',
       function()

@@ -1,8 +1,6 @@
 return {
-  -- NOTE: Yes, you can install new plugins here!
   'mfussenegger/nvim-dap',
   enabled = false,
-  -- NOTE: And you can specify dependencies as well
   dependencies = {
     -- Installs the debug adapters for you
     'mason-org/mason.nvim',
