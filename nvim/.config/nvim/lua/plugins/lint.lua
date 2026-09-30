@@ -5,10 +5,10 @@ return { -- Linting
     local lint = require 'lint'
     lint.linters_by_ft = {
       markdown = { 'markdownlint' },
-      javascript = { 'eslint_d' },
-      javascriptreact = { 'eslint_d' },
-      typescript = { 'eslint_d' },
-      typescriptreact = { 'eslint_d' },
+      -- javascript = { 'eslint_d' },
+      -- javascriptreact = { 'eslint_d' },
+      -- typescript = { 'eslint_d' },
+      -- typescriptreact = { 'eslint_d' },
     }
 
     local function has_eslint(bufnr)
@@ -72,5 +72,26 @@ return { -- Linting
         end
       end,
     })
+    vim.api.nvim_create_user_command('LintInfo', function()
+      local ft = vim.bo.filetype
+      local linters = lint.linters_by_ft[ft] or {}
+
+      print('Filetype: ' .. ft)
+
+      for _, name in ipairs(linters) do
+        local linter = lint.linters[name]
+
+        local enabled = true
+
+        if linter.condition then
+          enabled = linter.condition {
+            filename = vim.api.nvim_buf_get_name(0),
+            bufnr = vim.api.nvim_get_current_buf(),
+          }
+        end
+
+        print(string.format('%s: %s', name, enabled and 'ENABLED' or 'DISABLED'))
+      end
+    end, {})
   end,
 }

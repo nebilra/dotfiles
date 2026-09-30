@@ -117,7 +117,7 @@ else
     diag = { error = palette.dragonRed, warning = palette.dragonYellow, info = palette.dragonBlue, hint = palette.dragonTeal },
   }
 end
-local has_devicons, devicons = pcall(require, 'nvim-web-devicons')
+local has_icons, icons = pcall(require, 'mini.icons')
 local static = {}
 
 -- ~  --------------------------------------------------------------------------------  ~ --
@@ -141,10 +141,11 @@ local custom_icons = {
 
 local get_ftype_icon = function()
   local full_filename = vim.api.nvim_buf_get_name(0)
-  local filename = vim.fn.fnamemodify(full_filename, ':t')
-  local extension = vim.fn.fnamemodify(filename, ':e')
-  static.ftype_icon, static.ftype_icon_color = devicons.get_icon_color(filename, extension, { default = true })
-  return static.ftype_icon and static.ftype_icon .. ''
+  if full_filename == '' then
+    return
+  end
+  static.ftype_icon, static.ftype_icon_hl = icons.get('file', full_filename)
+  return static.ftype_icon
 end
 
 local condition = {
@@ -257,14 +258,16 @@ status_c {
 }
 
 status_c {
-  -- File type icon via 'nvim-web-devicons'
+  -- File type icon via 'mini.icons'
   function()
-    if has_devicons then
+    if has_icons then
       return get_ftype_icon()
     end
   end,
   cond = condition.is_buf_empty,
-  color = { fg = static.ftype_icon_color },
+  color = function()
+    return static.ftype_icon_hl
+  end,
   padding = { left = 1, right = 0 },
 }
 

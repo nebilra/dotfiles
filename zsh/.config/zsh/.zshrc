@@ -29,6 +29,7 @@ precmd() { precmd() { echo "" } }
 
 bindkey '^R' fzf-history-widget
 bindkey '^P' up-line-or-beginning-search
+bindkey "^[n" forward-word
 
 # Custom zsh scripts
 source $ZDOTDIR/paths.zsh

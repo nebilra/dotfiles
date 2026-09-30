@@ -43,4 +43,5 @@ return {
       prevInput = { n = '<s-tab>' },
     },
   },
+  cmd = { 'GrugFar', 'GrugFarWithin' },
 }

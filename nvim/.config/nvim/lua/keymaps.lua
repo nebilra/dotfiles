@@ -115,12 +115,6 @@ map('n', '<leader>x', '<cmd>bp<CR><cmd>bd#<CR>', { desc = 'buffer close' })
 -- Navigate Open Tabs
 map('n', '<C-z>', '<cmd>tabclose<CR>', { desc = 'Tab close' })
 map('n', '<C-n>', '<cmd>tab split<CR>', { desc = 'Tab create' })
-map({ 'n' }, '<tab>', function()
-  vim.cmd 'tabnext'
-end, { desc = 'Tab goto next' })
-map({ 'n' }, '<S-tab>', function()
-  vim.cmd 'tabprevious'
-end, { desc = 'Tab goto previous' })
 map({ 'n', 't' }, '<M-C-j>', function()
   vim.cmd 'tabnext'
   if vim.bo.buftype == 'terminal' then

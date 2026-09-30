@@ -35,5 +35,6 @@ path+=(
 	$XDG_DATA_HOME/pnpm
 	$XDG_DATA_HOME/pnpm/bin
 	$CARGO_HOME/bin
+	$HOME/.docker/sbx/bin
 )
 export path

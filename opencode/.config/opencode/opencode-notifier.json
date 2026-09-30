@@ -41,7 +41,7 @@
 			"bell": false
 		},
 		"error": {
-			"sound": true,
+			"sound": false,
 			"notification": true,
 			"command": true,
 			"bell": false

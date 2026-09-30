@@ -40,6 +40,11 @@
 			"ps *": "allow",
 
 			// formating commands
+			"pnpm exec tsc --noEmit*": "allow",
+			"pnpm exec biome*": "allow",
+			"pnpm exec prettier*": "allow",
+			"pnpm exec eslint*": "allow",
+			"pnpm exec ruff*": "allow",
 			"npx tsc --noEmit*": "allow",
 			"npx biome*": "allow",
 			"npx prettier*": "allow",
@@ -96,7 +101,7 @@
 	"autoupdate": false,
 	"plugin": [
 		"@mohak34/opencode-notifier@latest",
-		"@cortexkit/opencode-magic-context@0.34.0"
+		"@cortexkit/opencode-magic-context@0.42.6"
 	],
 	"mcp": {
 		"supabase": {
@@ -107,6 +112,16 @@
 		"hound": {
 			"type": "local",
 			"command": ["hound"],
+			"enabled": true
+		},
+		"playwright": {
+			"type": "local",
+			"command": ["pnpm dlx", "@playwright/mcp@0.0.82"],
+			"enabled": true
+		},
+		"atlassian": {
+			"type": "remote",
+			"url": "https://mcp.atlassian.com/v2/mcp",
 			"enabled": true
 		}
 	},

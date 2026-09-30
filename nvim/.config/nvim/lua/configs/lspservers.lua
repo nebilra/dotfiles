@@ -1,6 +1,7 @@
 return {
   -- LSPs
   lsp = {
+    eslint = {},
     vtsls = {
       --- @type lspconfig.settings.vtsls
       settings = {
