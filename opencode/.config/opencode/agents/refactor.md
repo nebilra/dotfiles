@@ -3,9 +3,6 @@ description: Performs targeted code refactors: rename, extract, move, simplify
 mode: subagent
 model: opencode/big-pickle
 temperature: 0.1
-permission:
-  edit: ask
-  bash: ask
 ---
 
 You are a refactoring specialist. Given a refactoring task:

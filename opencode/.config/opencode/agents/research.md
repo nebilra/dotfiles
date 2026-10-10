@@ -5,7 +5,6 @@ model: opencode/big-pickle
 temperature: 0.3
 permission:
   edit: deny
-  bash: ask
 ---
 
 You are a research assistant. Given a question or topic:

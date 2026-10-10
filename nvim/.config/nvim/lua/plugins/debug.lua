@@ -1,40 +1,34 @@
 return {
-  'mfussenegger/nvim-dap',
-  enabled = false,
+  'JarnDev/autodap.nvim',
   dependencies = {
-    -- Installs the debug adapters for you
-    'mason-org/mason.nvim',
-    'jay-babu/mason-nvim-dap.nvim',
-
+    'mfussenegger/nvim-dap',
+    'williamboman/mason.nvim',
     'igorlfs/nvim-dap-view',
-
-    -- Add your own debuggers here
-    'leoluz/nvim-dap-go',
-    'mxsdev/nvim-dap-vscode-js',
   },
   config = function()
-    local dap = require 'dap'
-
-    require('mason-nvim-dap').setup {
-      -- Makes a best effort to setup the various debuggers with
-      -- reasonable debug configurations
-      automatic_installation = true,
-
-      -- You can provide additional configuration to the handlers,
-      -- see mason-nvim-dap README for more information
-      handlers = {},
-
-      -- You'll need to check that you have the required things installed
-      -- online, please don't ask me how to install them :)
-      ensure_installed = {
-        -- Update this to ensure that you have the debuggers for the langs you want
-        'delve',
-      },
+    require('autodap').setup {
+      languages = { 'node' },
     }
-
     -- Change breakpoint icons
     vim.api.nvim_set_hl(0, 'DapBreak', { fg = '#e51400' })
     vim.api.nvim_set_hl(0, 'DapStop', { fg = '#ffcc00' })
+
+    require('dap-view').setup {
+      windows = {
+        size = 0.5,
+        position = 'right',
+        terminal = {
+          size = 0.5,
+          position = 'below',
+          -- List of debug adapters for which the terminal should be ALWAYS hidden
+          -- Can also be set to "true" to never show the terminal
+          hide = {},
+        },
+      },
+      virtual_text = {
+        enabled = true,
+      },
+    }
 
     local breakpoint_icons = vim.g.have_nerd_font
         and { Breakpoint = '', BreakpointCondition = '', BreakpointRejected = '', LogPoint = '', Stopped = '' }
@@ -45,53 +39,16 @@ return {
       local hl = (type == 'Stopped') and 'DapStop' or 'DapBreak'
       vim.fn.sign_define(tp, { text = icon, texthl = hl, numhl = hl })
     end
-
-    -- Install golang specific config
-    require('dap-go').setup {
-      delve = {
-        detached = vim.fn.has 'win32' == 0,
-      },
-    }
-
-    require('dap-vscode-js').setup {
-      adapters = { 'pwa-node', 'pwa-chrome', 'pwa-msedge', 'node-terminal', 'pwa-extensionHost' }, -- which adapters to register in nvim-dap
-    }
-
-    for _, language in ipairs { 'typescript', 'javascript', 'javascriptreact', 'typescriptreact' } do
-      require('dap').configurations[language] = {
-        {
-          type = 'pwa-node',
-          request = 'launch',
-          name = 'Launch file',
-          program = '${file}',
-          cwd = '${workspaceFolder}',
-        },
-        {
-          type = 'pwa-node',
-          request = 'attach',
-          name = 'Attach',
-          processId = require('dap.utils').pick_process,
-          cwd = '${workspaceFolder}',
-        },
-        -- {
-        --   type = 'pwa-node',
-        --   request = 'launch',
-        --   name = 'Debug Jest Tests',
-        --   -- trace = true, -- include debugger info
-        --   runtimeExecutable = 'node',
-        --   runtimeArgs = {
-        --     './node_modules/jest/bin/jest.js',
-        --     '--runInBand',
-        --   },
-        --   rootPath = '${workspaceFolder}',
-        --   cwd = '${workspaceFolder}',
-        --   console = 'integratedTerminal',
-        --   internalConsoleOptions = 'neverOpen',
-        -- },
-      }
-    end
   end,
   keys = {
+    {
+      '<F5>',
+      mode = 'n',
+      function()
+        require('autodap').continue()
+      end,
+      desc = 'Start debug session',
+    },
     {
       '<leader>dB',
       function()
@@ -182,13 +139,6 @@ return {
         require('dap').pause()
       end,
       desc = 'Debug: Pause',
-    },
-    {
-      '<leader>dr',
-      function()
-        require('dap').repl.toggle()
-      end,
-      desc = 'Debug: Toggle REPL',
     },
     {
       '<leader>ds',

@@ -83,9 +83,7 @@ layout {
         pane command="nvim"
     }
     tab focus=true {
-        pane command="sbx" {
-            args "run" "--memory" "2g" "opencode"
-        } 
+        pane command="ocw"
     }
 }
 

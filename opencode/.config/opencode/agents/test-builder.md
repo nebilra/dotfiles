@@ -3,9 +3,6 @@ description: Writes tests for new features following existing patterns
 mode: subagent
 model: opencode/big-pickle
 temperature: 0.1
-permission:
-  edit: ask
-  bash: ask
 ---
 
 You are a test writer. Given a new feature or code change:

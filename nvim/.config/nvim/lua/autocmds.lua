@@ -130,6 +130,13 @@ end, {
   desc = 'Re-enable autoimportsorting-on-save',
 })
 
+-- Record theme changes in ui/theme.lua
+autocmd('ColorScheme', {
+  callback = function(args)
+    vim.fn.jobstart("sed -i '' -e 's/\\[\\[colorscheme .*\\]\\]/[[colorscheme " .. args.match .. "]]/' ~/.config/nvim/lua/ui/theme.lua")
+  end,
+})
+
 -- -- No auto comment
 -- autocmd('FileType', {
 --   group = vim.api.nvim_create_augroup('no_auto_comment', {}),

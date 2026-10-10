@@ -1,0 +1,385 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# ============================================================
+# OpenCode Bubblewrap Sandbox
+# ============================================================
+#
+# Usage:
+#
+#   opencode-sandbox
+#       Current directory is RW.
+#
+#   opencode-sandbox ~/project-a ~/project-b
+#       Both directories are RW.
+#
+#   opencode-sandbox ~/project-a --ro ~/shared ~/reference
+#       project-a = RW
+#       shared    = RO
+#       reference = RO
+#
+#   opencode-sandbox ~/project -- --some-opencode-arg
+#       Arguments after "--" are passed to OpenCode.
+#
+# Everything before --ro is RW.
+# Everything after --ro is RO.
+#
+# ============================================================
+
+
+# ------------------------------------------------------------
+# Configuration
+# ------------------------------------------------------------
+
+BWRAP="${BWRAP:-bwrap}"
+
+if ! command -v "$BWRAP" >/dev/null 2>&1; then
+    echo "error: bubblewrap (bwrap) is not installed" >&2
+    exit 1
+fi
+
+OPENCODE="${OPENCODE:-$(command -v opencode || true)}"
+
+if [[ -z "$OPENCODE" ]]; then
+    echo "error: opencode was not found in PATH" >&2
+    exit 1
+fi
+
+
+# ------------------------------------------------------------
+# Parse arguments
+# ------------------------------------------------------------
+
+PROJECT_ARGS=()
+OPENCODE_ARGS=()
+
+PARSING_OPENCODE_ARGS=false
+READ_ONLY=false
+
+for arg in "$@"; do
+
+    # Everything after "--" goes directly to OpenCode.
+    if [[ "$PARSING_OPENCODE_ARGS" == true ]]; then
+        OPENCODE_ARGS+=("$arg")
+        continue
+    fi
+
+    if [[ "$arg" == "--" ]]; then
+        PARSING_OPENCODE_ARGS=true
+        continue
+    fi
+
+    if [[ "$arg" == "--ro" ]]; then
+        READ_ONLY=true
+        continue
+    fi
+
+    if [[ "$READ_ONLY" == true ]]; then
+        PROJECT_ARGS+=("ro:$arg")
+    else
+        PROJECT_ARGS+=("rw:$arg")
+    fi
+done
+
+
+# ------------------------------------------------------------
+# Default project
+# ------------------------------------------------------------
+
+if [[ ${#PROJECT_ARGS[@]} -eq 0 ]]; then
+    PROJECT_ARGS=("rw:$PWD")
+fi
+
+
+# ------------------------------------------------------------
+# Resolve and validate project directories
+# ------------------------------------------------------------
+
+RW_DIRS=()
+RO_DIRS=()
+
+for entry in "${PROJECT_ARGS[@]}"; do
+
+    mode="${entry%%:*}"
+    path="${entry#*:}"
+
+    if [[ ! -e "$path" ]]; then
+        echo "error: path does not exist: $path" >&2
+        exit 1
+    fi
+
+    path="$(realpath "$path")"
+
+    if [[ ! -d "$path" ]]; then
+        echo "error: path is not a directory: $path" >&2
+        exit 1
+    fi
+
+    case "$mode" in
+        rw)
+            RW_DIRS+=("$path")
+            ;;
+
+        ro)
+            RO_DIRS+=("$path")
+            ;;
+
+        *)
+            echo "error: invalid mount mode: $mode" >&2
+            exit 1
+            ;;
+    esac
+done
+
+
+# ------------------------------------------------------------
+# Sandbox storage
+#
+# Nothing here is shared with normal OpenCode.
+# ------------------------------------------------------------
+
+SANDBOX_ROOT="${XDG_DATA_HOME:-$HOME/.local/share}/opencode-sandbox"
+
+SANDBOX_HOME="$SANDBOX_ROOT/home"
+SANDBOX_CONFIG="$SANDBOX_ROOT/config"
+
+mkdir -p \
+    "$SANDBOX_HOME" \
+    "$SANDBOX_CONFIG"
+
+
+# ------------------------------------------------------------
+# Host environment values we intentionally preserve
+# ------------------------------------------------------------
+
+HOST_USER="${USER:-$(id -un)}"
+HOST_LOGNAME="${LOGNAME:-$HOST_USER}"
+
+HOST_PATH="${PATH:-/usr/local/bin:/usr/bin:/bin}"
+HOST_TERM="${TERM:-xterm-256color}"
+HOST_LANG="${LANG:-C.UTF-8}"
+
+HOST_COLORTERM="${COLORTERM:-}"
+HOST_EDITOR="${EDITOR:-}"
+HOST_VISUAL="${VISUAL:-}"
+
+
+# ------------------------------------------------------------
+# Bubblewrap arguments
+# ------------------------------------------------------------
+
+BWRAP_ARGS=(
+
+    # --------------------------------------------------------
+    # Process isolation
+    # --------------------------------------------------------
+
+    --unshare-pid
+    --unshare-uts
+    --unshare-ipc
+
+    # Keep normal network access.
+    #
+    # Change to --unshare-net if you want NO network access.
+    --share-net
+
+    --die-with-parent
+    --new-session
+
+
+    # --------------------------------------------------------
+    # Base filesystem
+    # --------------------------------------------------------
+
+    --ro-bind /usr /usr
+    --ro-bind /etc /etc
+
+    --ro-bind /lib /lib
+    --ro-bind-try /lib64 /lib64
+    --ro-bind-try /lib32 /lib32
+
+    --symlink usr/bin /bin
+    --symlink usr/sbin /sbin
+
+
+    # --------------------------------------------------------
+    # Kernel / process filesystems
+    # --------------------------------------------------------
+
+    # Fresh proc instead of exposing host /proc.
+    --proc /proc
+
+    # Fresh device namespace.
+    --dev /dev
+
+    # Temporary filesystem.
+    --tmpfs /tmp
+
+
+    # --------------------------------------------------------
+    # Environment
+    # --------------------------------------------------------
+
+    # Do NOT inherit the host environment.
+    --clearenv
+
+    --setenv HOME "$SANDBOX_HOME"
+
+    --setenv USER "$HOST_USER"
+    --setenv LOGNAME "$HOST_LOGNAME"
+
+    --setenv PATH "$HOST_PATH"
+
+    --setenv TERM "$HOST_TERM"
+    --setenv LANG "$HOST_LANG"
+
+
+    # Optional terminal/editor variables.
+)
+
+# Add optional environment variables only when they exist.
+
+if [[ -n "$HOST_COLORTERM" ]]; then
+    BWRAP_ARGS+=(--setenv COLORTERM "$HOST_COLORTERM")
+fi
+
+if [[ -n "$HOST_EDITOR" ]]; then
+    BWRAP_ARGS+=(--setenv EDITOR "$HOST_EDITOR")
+fi
+
+if [[ -n "$HOST_VISUAL" ]]; then
+    BWRAP_ARGS+=(--setenv VISUAL "$HOST_VISUAL")
+fi
+
+
+# ------------------------------------------------------------
+# XDG directories
+#
+# Keep application data inside the sandbox.
+# ------------------------------------------------------------
+
+BWRAP_ARGS+=(
+    --setenv XDG_CONFIG_HOME "$SANDBOX_HOME/.config"
+    --setenv XDG_DATA_HOME "$SANDBOX_HOME/.local/share"
+    --setenv XDG_STATE_HOME "$SANDBOX_HOME/.local/state"
+    --setenv XDG_CACHE_HOME "$SANDBOX_HOME/.cache"
+)
+
+
+# ------------------------------------------------------------
+# OpenCode-specific directories
+# ------------------------------------------------------------
+
+BWRAP_ARGS+=(
+    --setenv OPENCODE_CONFIG_DIR "$SANDBOX_CONFIG"
+
+    --bind "$SANDBOX_HOME" "$SANDBOX_HOME"
+    --bind "$SANDBOX_CONFIG" "$SANDBOX_CONFIG"
+    --bind "$HOME/.local/share/opencode" "$SANDBOX_HOME/.local/share/opencode"
+    --bind "$HOME/.local/state/opencode" "$SANDBOX_HOME/.local/state/opencode"
+)
+
+
+# ------------------------------------------------------------
+# Mise
+#
+# Existing Mise installations are available read-only.
+#
+# This allows things like:
+#
+#   node
+#   npm
+#   pnpm
+#   bun
+#   python
+#   go
+#   etc.
+#
+# without allowing the sandbox to modify the installations.
+# ------------------------------------------------------------
+
+MISE_DIR="$HOME/.local/share/mise"
+FLUTTER_ROOT_DIR="$HOME/.local/share/mise/installs/flutter"
+FLUTTER_CACHE_DIR="$HOME/.pub-cache"
+
+if [[ -d "$MISE_DIR" ]]; then
+    BWRAP_ARGS+=(
+        --ro-bind "$MISE_DIR" "$MISE_DIR"
+        --bind "$FLUTTER_CACHE_DIR" "$FLUTTER_CACHE_DIR"
+        --bind "$FLUTTER_ROOT_DIR" "$FLUTTER_ROOT_DIR"
+    )
+fi
+
+# ------------------------------------------------------------
+# Local binaries
+#
+# Existing Binary scripts and installations are available read only.
+#
+# This allows things like:
+#
+#   hound
+#   playwright
+#   jira
+#   jupyter
+#
+# without allowing the sandbox to modify the installations.
+# ------------------------------------------------------------
+
+BIN_DIR="$HOME/.local/bin"
+LIB_DIR="$HOME/.local/lib"
+
+if [[ -d "$BIN_DIR" ]]; then
+    BWRAP_ARGS+=(
+        --ro-bind "$BIN_DIR" "$BIN_DIR"
+        --ro-bind "$LIB_DIR" "$SANDBOX_HOME/.local/lib"
+    )
+fi
+
+# ------------------------------------------------------------
+# Project mounts
+# ------------------------------------------------------------
+
+# RW projects
+for dir in "${RW_DIRS[@]}"; do
+    BWRAP_ARGS+=(
+        --bind "$dir" "$dir"
+    )
+done
+
+# RO projects
+for dir in "${RO_DIRS[@]}"; do
+    BWRAP_ARGS+=(
+        --ro-bind "$dir" "$dir"
+    )
+done
+
+
+# ------------------------------------------------------------
+# Working directory
+#
+# First RW directory becomes the working directory.
+# ------------------------------------------------------------
+
+WORKDIR="${RW_DIRS[0]}"
+
+BWRAP_ARGS+=(
+    --chdir "$WORKDIR"
+)
+
+
+# ------------------------------------------------------------
+# Execute OpenCode
+# ------------------------------------------------------------
+
+BWRAP_ARGS+=(
+    --
+    "$OPENCODE"
+    "${OPENCODE_ARGS[@]}"
+)
+
+
+# ------------------------------------------------------------
+# Execute sandbox
+# ------------------------------------------------------------
+
+exec "$BWRAP" "${BWRAP_ARGS[@]}"

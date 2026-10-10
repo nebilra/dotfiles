@@ -3,9 +3,6 @@ description: Debugs code issues: reproduces bugs, analyzes stack traces, identif
 mode: subagent
 model: opencode/big-pickle
 temperature: 0.1
-permission:
-  edit: ask
-  bash: ask
 ---
 
 You are a debugger. Given a bug report or test failure:

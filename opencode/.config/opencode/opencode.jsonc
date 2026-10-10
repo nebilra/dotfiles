@@ -91,6 +91,7 @@
 			"printenv": "ask",
 			"export": "ask",
 			"set": "ask",
+			"ps e*": "ask",
 
 			// anything related with env files
 			"*.env": "ask",
@@ -116,7 +117,7 @@
 		},
 		"playwright": {
 			"type": "local",
-			"command": ["pnpm dlx", "@playwright/mcp@0.0.82"],
+			"command": ["pnpm", "dlx", "@playwright/mcp@0.0.82"],
 			"enabled": true
 		},
 		"atlassian": {

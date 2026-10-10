@@ -55,7 +55,11 @@ return {
 
     require('mini.bracketed').setup()
     require('mini.move').setup()
-    require('mini.icons').setup()
+
+    local mini_icons = require 'mini.icons'
+
+    mini_icons.setup()
+    mini_icons.mock_nvim_web_devicons()
   end,
 }
 -- vim: ts=2 sts=2 sw=2 et
