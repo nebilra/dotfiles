@@ -28,4 +28,7 @@ require 'keymaps'
 -- [[ AI workflow ]]
 require 'configs.ai'
 
+-- [[ Load Theme ]]
+require 'ui.theme'
+
 -- vim: ts=2 sts=2 sw=2 et

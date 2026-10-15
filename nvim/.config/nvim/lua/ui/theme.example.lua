@@ -1,3 +1,1 @@
-return function()
-  vim.cmd [[colorscheme tokyonight]]
-end
+vim.cmd [[colorscheme tokyonight]]
