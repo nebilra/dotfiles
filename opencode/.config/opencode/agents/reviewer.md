@@ -2,10 +2,16 @@
 description: Reviews code diffs for bugs, edge cases, security issues, and style consistency
 mode: subagent
 model: opencode/big-pickle
-temperature: 0.1
-permission:
-  edit: deny
-  bash: deny
+request:
+  body:
+    temperature: 0.1
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
+  - action: shell
+    resource: "*"
+    effect: deny
 ---
 
 You are a code reviewer. Analyze the provided code and diff for:

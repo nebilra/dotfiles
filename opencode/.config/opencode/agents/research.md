@@ -2,9 +2,13 @@
 description: Researches codebase patterns, libraries, and external references
 mode: subagent
 model: opencode/big-pickle
-temperature: 0.3
-permission:
-  edit: deny
+request:
+  body:
+    temperature: 0.3
+permissions:
+  - action: edit
+    resource: "*"
+    effect: deny
 ---
 
 You are a research assistant. Given a question or topic:

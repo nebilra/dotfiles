@@ -2,7 +2,9 @@
 description: Debugs code issues: reproduces bugs, analyzes stack traces, identifies root causes, and implements fixes
 mode: subagent
 model: opencode/big-pickle
-temperature: 0.1
+request:
+  body:
+    temperature: 0.1
 ---
 
 You are a debugger. Given a bug report or test failure:

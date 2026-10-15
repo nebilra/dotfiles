@@ -275,6 +275,7 @@ BWRAP_ARGS+=(
 
     --bind "$SANDBOX_HOME" "$SANDBOX_HOME"
     --bind "$SANDBOX_CONFIG" "$SANDBOX_CONFIG"
+    --bind "$HOME/.cache" "$SANDBOX_HOME/.cache"
     --bind "$HOME/.local/share/opencode" "$SANDBOX_HOME/.local/share/opencode"
     --bind "$HOME/.local/state/opencode" "$SANDBOX_HOME/.local/state/opencode"
 )

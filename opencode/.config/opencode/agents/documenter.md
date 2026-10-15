@@ -2,7 +2,9 @@
 description: Documents code changes in docs/ folder as markdown
 mode: subagent
 model: opencode/big-pickle
-temperature: 0.2
+request:
+  body:
+    temperature: 0.2
 ---
 
 You are a documentation writer. Given a set of code changes, write clear markdown documentation in the docs/ folder. Include:

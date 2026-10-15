@@ -32,6 +32,8 @@ return {
       'dap-repl',
       'codediff',
       'codediff-view',
+      'codediff-explorer',
+      'log',
     },
   },
   tabline = {
@@ -53,8 +55,20 @@ return {
         'filetype',
         icon_only = true,
         padding = { left = 1, right = 0 },
+        cond = function()
+          return vim.fn.empty(vim.fn.expand '%:t') ~= 1
+        end,
       },
-      { 'filename', path = 4 },
+      {
+        'filename',
+        path = 4,
+        symbols = {
+          modified = custom_icons.touched,
+          readonly = custom_icons.lock,
+          unnamed = '[No Name]',
+          newfile = '[New]',
+        },
+      },
     },
     lualine_c = {},
     lualine_x = {

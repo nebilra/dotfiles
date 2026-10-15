@@ -2,7 +2,9 @@
 description: Performs targeted code refactors: rename, extract, move, simplify
 mode: subagent
 model: opencode/big-pickle
-temperature: 0.1
+request:
+  body:
+    temperature: 0.1
 ---
 
 You are a refactoring specialist. Given a refactoring task:
