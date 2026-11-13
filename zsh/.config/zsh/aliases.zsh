@@ -21,6 +21,7 @@ alias lzs="lazysql"
 alias vis="vi-sql"
 alias lzd="lazydocker"
 alias tm="tmux"
+alias agent="cursor-agent"
 
 # To clean aliases
 alias svn="svn --config-dir \"$XDG_CONFIG_HOME\"/subversion"

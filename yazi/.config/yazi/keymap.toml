@@ -9,9 +9,19 @@ run  = "cd ~/Videos"
 desc = "go to Videos"
 
 [[mgr.prepend_keymap]]
+on   = [ "g", "l" ]
+run  = "cd ~/.local"
+desc = "go to Local"
+
+[[mgr.prepend_keymap]]
 on   = [ "g", "s" ]
 run  = "cd /mnt/668E28458E280FDB/Series"
 desc = "go to Series"
+
+[[mgr.prepend_keymap]]
+on   = [ "g", "S" ]
+run  = "cd ~/.local/share"
+desc = "go to Share"
 
 [[mgr.prepend_keymap]]
 on   = [ "g", "m" ]

@@ -66,12 +66,19 @@ return {
           prepend_args = { '--use-tabs' },
         },
         biome = {
-          -- condition = function(ctx)
-          --   return vim.fs.find({ 'biome.json', 'biome.jsonc' }, {
-          --     path = vim.fs.dirname(ctx.filename),
-          --     upward = true,
-          --   })[1] ~= nil
-          -- end,
+          condition = function(ctx)
+            return vim.fs.find({
+              '.prettierrc',
+              '.prettierrc.json',
+              '.prettierrc.js',
+              '.prettierrc.cjs',
+              'prettier.config.js',
+              'prettier.config.cjs',
+            }, {
+              path = vim.fs.dirname(ctx.filename),
+              upward = true,
+            })[1] == nil
+          end,
         },
       },
       formatters_by_ft = {

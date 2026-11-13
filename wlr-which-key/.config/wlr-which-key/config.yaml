@@ -62,6 +62,9 @@ menu:
       - key: "v"
         desc: Vpn
         cmd: protonvpn-app
+      - key: "V"
+        desc: Vivaldi
+        cmd: vivaldi
       - key: "w"
         desc: Hotspot
         cmd: wihotspot
