@@ -282,6 +282,7 @@ BWRAP_ARGS+=(
     --bind "$HOME/.local/share/opencode" "$SANDBOX_HOME/.local/share/opencode"
     --bind "$HOME/.local/state/opencode" "$SANDBOX_HOME/.local/state/opencode"
     --bind "$HOME/.agents" "$SANDBOX_HOME/.agents"
+    --bind "$HOME/.agent-browser" "$SANDBOX_HOME/.agent-browser"
 )
 
 

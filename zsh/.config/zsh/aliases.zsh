@@ -22,6 +22,9 @@ alias vis="vi-sql"
 alias lzd="lazydocker"
 alias tm="tmux"
 alias agent="cursor-agent"
+alias adb='HOME="$XDG_DATA_HOME"/android adb'
+alias mvn="mvn -gs $XDG_CONFIG_HOME/maven/settings.xml"
+alias svn="svn --config-dir $XDG_CONFIG_HOME/subversion"
 
 # To clean aliases
 alias svn="svn --config-dir \"$XDG_CONFIG_HOME\"/subversion"
